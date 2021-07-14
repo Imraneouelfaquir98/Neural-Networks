@@ -19,7 +19,7 @@ public:
 
 	NeuralNets();
 	Parameters 	initialize_parameters();
-	Cache				forward_propagation	(vector<vector<double>>	 X, Parameters parameters);
+	Cache				forward_propagation	(vector<vector<double>>	 X, Parameters parameters); 
 	double			compute_cost				(vector 			<double> 	A2, Parameters parameters);
 	double			sigmoid							(vector 			<double>	 X);
 	double			sigmoid							(double	 X);
