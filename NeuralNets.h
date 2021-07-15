@@ -18,15 +18,15 @@ public:
 	bool 		print_cost;
 
 	NeuralNets();
-	Parameters 	initialize_parameters();
-	Cache		forward_propagation	(vector<vector<double>>	 X, Parameters parameters);
-	double		compute_cost		(vector 	  <double> 	A2, Parameters parameters);
-	double		sigmoid				(vector 	  <double>	 X);
-	double		sigmoid				(double	 X);
-	double 		predict 			(Parameters parameters	, vector<double> X);
-	Grads 		backward_propagation(Parameters parameters	, Cache 		 cache);
-	Parameters	update_parameters	(Parameters parameters	, Grads 		 grads);
-	void 		fit					();
+	Parameters  initialize_parameters();
+	Cache       forward_propagation (vector<vector<double>>  X, Parameters parameters);
+	double      compute_cost        (vector       <double>  A2, Parameters parameters);
+	double      sigmoid             (vector       <double>   X);
+	double      sigmoid             (double	 X);
+	double      predict             (Parameters parameters, vector<double> X);
+	Grads       backward_propagation(Parameters parameters, Cache  cache);
+	Parameters  update_parameters   (Parameters parameters, Grads  grads);
+	void        fit                 ();
 
 };
 
