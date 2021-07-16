@@ -34,7 +34,6 @@ int main(int argc, char const *argv[]) {
                 		num_iterations,
                 		print_cost
                 	);
-  // Test initialize_parameters
   NN.fit();
   cout<<"\nW1 = "<<endl;
   print(NN.parameters.W1);
@@ -44,32 +43,6 @@ int main(int argc, char const *argv[]) {
   print(NN.parameters.W2);
   cout<<"\nb2 = "<<endl;
   print(NN.parameters.b2);
-
-  // Test cost_function
-  // NN.parameters.b2[0][0] = 10;
-  // cout<<NN.compute_cost(NN.parameters.b2)<<endl;
-
-  // Test forward propagation function
-  // pair<vector<vector<double>>,Cache> myPair = NN.forward_propagation(X);
-  // cout<<"\nZ1 = "<<endl;
-  // print(myPair.second.Z1);
-  // cout<<"\nA1 = "<<endl;
-  // print(myPair.second.A1);
-  // cout<<"\nZ2 = "<<endl;
-  // print(myPair.second.Z2);
-  // cout<<"\nA2 = "<<endl;
-  // print(myPair.second.A2);
-
-  // Test backward_propagation
-  // Grads grads = NN.backward_propagation(myPair.second);
-  // cout<<"\ndW1 = "<<endl;
-  // print(grads.dW1);
-  // cout<<"\ndb1 = "<<endl;
-  // print(grads.db1);
-  // cout<<"\ndW2 = "<<endl;
-  // print(grads.dW2);
-  // cout<<"\ndb2 = "<<endl;
-  // print(grads.db2);
 
   return 0;
 }
