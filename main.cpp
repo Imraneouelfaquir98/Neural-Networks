@@ -101,34 +101,6 @@ Dataset load_dataset(string filename, Dataset dataset){
   return dataset;
 }
 
-// vector<vector<double>> load_dataset(string filename){
-//   vector<vector<double>> X;
-//   ifstream myFile(filename);
-//
-//   if(!myFile.is_open()) throw runtime_error("Could not open \""+filename+"\" file");
-//   string line;
-//   double val;
-//   stringstream ss;
-//
-//   for (size_t i = 0; i < 4; i++) getline(myFile, line);
-//
-//   if(myFile.good()){
-//       vector<double> X_line;
-//       while (getline(myFile, line)) {
-//         ss = stringstream(line);
-//         for (size_t i = 0; i < 4; i++) {
-//           ss>>val;
-//           X_line.push_back(val);
-//         }
-//         X.push_back(X_line);
-//         X_line.clear();
-//       }
-//       myFile.close();
-//   }
-//   return X;
-// }
-
-
 vector<vector<double>> read_csv(string filename){
     vector<vector<double>> result;
     ifstream myFile(filename);
