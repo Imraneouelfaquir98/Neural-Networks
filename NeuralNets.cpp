@@ -42,14 +42,16 @@ void NeuralNets::update_parameters(Grads  grads){
 
 pair<vector<vector<double>>,Cache>
 NeuralNets::forward_propagation (vector<vector<double>>  X){
+
   Cache cache;
   vector<vector<double>> V;
   for (size_t i = 0; i < this->n_h; i++)
-    V.push_back(vector<double>(this->X.size(), parameters.b1[i][0]));
+    V.push_back(vector<double>(X.size(), parameters.b1[i][0]));
+
   cache.Z1 = parameters.W1 * T(X) + V;
 
   cache.A1 = tanh_v(cache.Z1);
-  V = vector<vector<double>>(1, vector<double>(this->X.size(), parameters.b2[0][0]));
+  V = vector<vector<double>>(1, vector<double>(X.size(), parameters.b2[0][0]));
 
   cache.Z2 = parameters.W2 * cache.A1 + V;
   cache.A2 = sigmoid(cache.Z2);
@@ -90,7 +92,7 @@ void NeuralNets::fit(){
     cost    = compute_cost(forward.first);
     grads   = backward_propagation(forward.second);
     update_parameters(grads);
-    if (this->print_cost and i%10 == 0)
+    if (this->print_cost and i%100 == 0)
       cout<<"Cost after iteration "<<i<<" :"<<cost<<endl;
   }
 }

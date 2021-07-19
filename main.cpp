@@ -9,41 +9,34 @@
 
 using namespace std;
 
+typedef struct Dataset{
+  vector<vector<double>> X_train, X_test;
+  vector<vector<int   >> Y_train, Y_test;
+}Dataset;
+
+Dataset load_dataset(string filename, Dataset dataset);
 vector<vector<double>> read_csv(string filename);
 
 int main(int argc, char const *argv[]) {
-  vector<vector<double>> X;
-  vector<vector<int>> Y;
 
-  vector<vector<double>> result = read_csv("dataset.csv");
-  for (size_t i = 0; i < result.size(); i++) {
-    X.push_back({result[i][0], result[i][1]});
-    Y.push_back({(int)result[i][2]});
-  }
+  Dataset dataset;
+  for (int i = 1; i <= 50; i++)
+    dataset = load_dataset("./SolutionDatasetRC101/solution_data_"+to_string(i)+".txt", dataset);
 
-  double learning_rate = 1.2;
-  int    n_h = 4;
-  int    num_iterations = 100;
+  double learning_rate = 0.001;
+  int    n_h = 10;
+  int    num_iterations = 2500;
   bool   print_cost = true;
 
   NeuralNets NN = NeuralNets(
-    X,
-    Y,
+    dataset.X_train,
+    dataset.Y_train,
     learning_rate,
     n_h,
     num_iterations,
     print_cost
   );
 
-  NN.parameters.W1 = {
-                      {-1.6298    ,  0.301667},
-                      {-1.42989   , -0.703748},
-                      {1.6959     , -0.219292},
-                      {0.00107501 , -0.247501}
-                    };
-  NN.parameters.b1 = {{-2.03387 },{-0.155607},{-1.88115 },{-0.220199 }};
-  NN.parameters.W2 = {{20.746,-21.9433,-19.9886,-4.21774}};
-  NN.parameters.b2 = {{-0.648808}};
 
   NN.fit();
   cout<<"\nW1 = "<<endl;
@@ -55,22 +48,91 @@ int main(int argc, char const *argv[]) {
   cout<<"\nb2 = "<<endl;
   print(NN.parameters.b2);
 
-  vector<vector<int>> preds = T(NN.predict(X));
+  vector<vector<int>> preds = T(NN.predict(dataset.X_test));
   double accuracy = 0;
-  for (size_t i = 0; i < Y.size(); i++) {
-    accuracy += (Y[i][0] == preds[i][0])? 1 : 0;
+  for (size_t i = 0; i < dataset.Y_test.size(); i++) {
+    accuracy += (dataset.Y_test[i][0] == preds[i][0])? 1 : 0;
   }
 
-  cout<<"\nAccuracy = "<<(double)accuracy/Y.size()<<endl;
+  cout<<"\nAccuracy = "<<(double)accuracy/dataset.Y_test.size()<<endl;
 
   return 0;
 }
 // g++ -c main.cpp NeuralNets.cpp && g++ main.o NeuralNets.o -o out && ./out
 
+
+
+Dataset load_dataset(string filename, Dataset dataset){
+  ifstream myFile(filename);
+
+  string line;
+  double val;
+  stringstream ss;
+  int counter = 0;
+
+
+  if(!myFile.is_open()) throw runtime_error("Could not open \""+filename+"\" file");
+  for (size_t i = 0; i < 4; i++) getline(myFile, line);
+
+  if(myFile.good()){
+      vector<double> X_line;
+      while (getline(myFile, line)) {
+        ss = stringstream(line);
+        for (size_t i = 0; i < 3; i++) {
+          ss>>val;
+          X_line.push_back(val);
+        }
+        ss>>val;
+        if(counter%5 != 0){
+          ss>>val;
+          dataset.X_train.push_back(X_line);
+          dataset.Y_train.push_back({(int)val});
+        }
+        else{
+          ss>>val;
+          dataset.X_test.push_back(X_line);
+          dataset.Y_test.push_back({(int)val});
+        }
+        X_line.clear();
+        counter++;
+      }
+      myFile.close();
+  }
+  return dataset;
+}
+
+// vector<vector<double>> load_dataset(string filename){
+//   vector<vector<double>> X;
+//   ifstream myFile(filename);
+//
+//   if(!myFile.is_open()) throw runtime_error("Could not open \""+filename+"\" file");
+//   string line;
+//   double val;
+//   stringstream ss;
+//
+//   for (size_t i = 0; i < 4; i++) getline(myFile, line);
+//
+//   if(myFile.good()){
+//       vector<double> X_line;
+//       while (getline(myFile, line)) {
+//         ss = stringstream(line);
+//         for (size_t i = 0; i < 4; i++) {
+//           ss>>val;
+//           X_line.push_back(val);
+//         }
+//         X.push_back(X_line);
+//         X_line.clear();
+//       }
+//       myFile.close();
+//   }
+//   return X;
+// }
+
+
 vector<vector<double>> read_csv(string filename){
     vector<vector<double>> result;
     ifstream myFile(filename);
-    if(!myFile.is_open()) throw runtime_error("Could not open file");
+    if(!myFile.is_open()) throw runtime_error("Could not open \""+filename+"\" file");
     string line, colname;
     double val;
 
