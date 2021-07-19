@@ -43,19 +43,21 @@ public:
 
 	void     initialize_parameters();
 	double   compute_cost        (vector<vector<double>> A2);
-	double   predict             (vector<double> X );
 	Grads    backward_propagation(Cache  cache);
 	void     update_parameters   (Grads  grads);
 	void     fit                 ();
 
 	pair<vector<vector<double>>,Cache> forward_propagation (vector<vector<double>> X);
 
+	vector<vector<int   >> predict (vector<vector<double>> X);
 	vector<vector<double>> sigmoid (vector<vector<double>> Z);
 	vector<vector<double>> tanh_v  (vector<vector<double>> Z);
 	vector<vector<double>> log_v   (vector<vector<double>> Z);
 
 	long long int x0 = 765502822;
+	double threshold;
 	vector<vector<double>> random_uniform(int x, int y);
+	void set_threshold();
 };
 
 

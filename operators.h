@@ -12,7 +12,7 @@ template <typename T, typename D>
 double operator*(const vector<T>& U, const vector<D>& V){
     try{
         if(U.size() != V.size()){
-            throw string("ERREUR : Dimension incompatible !");
+            throw runtime_error("ERREUR : Dimension incompatible !");
         }
         else{
             double produit = 0;
@@ -48,7 +48,7 @@ vector<vector<double>> operator*(const vector<vector<T>>& U, const vector<vector
     vector <vector<double>> W(U.size() , vector<double>(V[0].size(),0));
     try{
         if(U[0].size() != V.size()){
-            throw string("ERREUR : Dimension incompatible !");
+            throw runtime_error("ERREUR : Dimension incompatible !");
         }
         else{
             for(int i = 0 ; i < U.size() ; i++){
@@ -85,7 +85,7 @@ template <typename T, typename D>
 vector<double> operator/(const vector<T> & U, const D &m){
     try{
         if( m == 0){
-            throw string("ERREUR : can not devise with zero !");
+            throw runtime_error("ERREUR : can not devise with zero !");
         }
         else{
             vector<double> W(U.size() , 0);
@@ -106,7 +106,7 @@ vector <vector<double>> operator/(const vector<vector<T>>& U, const D &m){
     vector <vector<double>> W(U.size() , vector<double>(U[0].size(),0));
     try{
         if( m == 0){
-            throw string("ERREUR : can not devise with zero !");
+            throw runtime_error("ERREUR : can not devise with zero !");
         }
         else{
             for(int i = 0 ; i < U.size() ; i++)
@@ -126,10 +126,10 @@ vector <vector<double>> operator/(const vector<vector<T>>& U, const vector<vecto
     vector <vector<double>> W(U.size() , vector<double>(U[0].size(),0));
     try{
         if(m[0].size() > 1 || m.size() > 1){
-            throw string("ERREUR : can not devise with vector !");
+            throw runtime_error("ERREUR : can not devise with vector !");
         }
         else if( m[0][0] == 0){
-            throw string("ERREUR : can not devise with zero !");
+            throw runtime_error("ERREUR : can not devise with zero !");
         }
         else{
             for(int i = 0 ; i < U.size() ; i++)
@@ -148,7 +148,7 @@ template <typename T, typename D>
 vector<double> operator-(const vector<T> & U, const vector<D> & V){
     try{
         if(U.size() != V.size()){
-            throw string("ERREUR : Dimension incompatible !1");
+            throw runtime_error("ERREUR : Dimension incompatible !1");
         }
         else{
             vector<double> W(U.size() , 0);
@@ -170,7 +170,7 @@ vector <vector<double>> operator-(const vector<vector<T>>& U, const vector<vecto
     vector <vector<double>> W(U.size() , vector<double>(U[0].size(),0));
     try{
         if(U.size() != V.size() || U[0].size() != V[0].size() ){
-            throw string("ERREUR : Dimension incompatible !");
+            throw runtime_error("ERREUR : Dimension incompatible !");
         }
         else{
             for(int i = 0 ; i < U.size() ; i++){
@@ -202,7 +202,7 @@ template <typename T, typename D>
 vector<double> operator+(const vector<T> & U, const vector<D> & V){
     try{
         if(U.size() != V.size()){
-            throw string("ERREUR : Dimension incompatible !2");
+            throw runtime_error("ERREUR : Dimension incompatible !2");
         }
         else{
             vector<double> W(U.size() , 0);
@@ -224,7 +224,7 @@ vector <vector<double>> operator+(const vector<vector<T>>& U, const vector<vecto
     vector <vector<double>> W(U.size() , vector<double>(U[0].size(),0));
     try{
         if(U.size() != V.size() || U[0].size() != V[0].size() ){
-            throw string("ERREUR : Dimension incompatible !");
+            throw runtime_error("ERREUR : Dimension incompatible !");
         }
         else{
             for(int i = 0 ; i < U.size() ; i++){
@@ -246,7 +246,7 @@ vector <vector<double>> matiply(const vector<vector<T>>& U, const vector<vector<
     vector <vector<double>> W(U.size() , vector<double>(U[0].size(),0));
     try{
         if(U.size() != V.size() || U[0].size() != V[0].size() ){
-            throw string("ERREUR : Dimension incompatible !");
+            throw runtime_error("ERREUR : Dimension incompatible !");
         }
         else{
             for(int i = 0 ; i < U.size() ; i++){

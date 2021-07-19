@@ -20,14 +20,17 @@ NeuralNets::NeuralNets(
   this->print_cost     = print_cost;
 
   n_x = (int)this->X[0].size();
-  n_y = 1;//(int)this->Y   .size();
+  n_y = 1;//(int)this->Y[0].size();
+
+  initialize_parameters();
+  set_threshold();
 }
 
 void NeuralNets::initialize_parameters(){
   this->parameters.W1 = random_uniform(this->n_h, this->n_x);
   this->parameters.W2 = random_uniform(this->n_y, this->n_h);
-  this->parameters.b1 = zeros<double>(this->n_h, 1);
-  this->parameters.b2 = zeros<double>(this->n_y, 1);
+  this->parameters.b1 = zeros<double> (this->n_h, 1);
+  this->parameters.b2 = zeros<double> (this->n_y, 1);
 };
 
 void NeuralNets::update_parameters(Grads  grads){
@@ -55,9 +58,9 @@ NeuralNets::forward_propagation (vector<vector<double>>  X){
 
 double NeuralNets::compute_cost(vector<vector<double>> A2){
   vector<vector<double>>
-  logprobs = 1/(double)this->Y.size()*(
-    matiply(log_v(A2),   T(this->Y)) +
-    matiply(1-log_v(A2), T(1 - this->Y))
+  logprobs = 1/((double)this->Y.size())*(
+    matiply(  log_v(A2), T(  this->Y)) +
+    matiply(1-log_v(A2), T(1-this->Y))
   );
   return -sum(logprobs);
 }
@@ -78,7 +81,6 @@ Grads NeuralNets::backward_propagation(Cache  cache){
 }
 
 void NeuralNets::fit(){
-  initialize_parameters();
   pair<vector<vector<double>>,Cache> forward;
   double cost;
   Grads grads;
@@ -88,9 +90,22 @@ void NeuralNets::fit(){
     cost    = compute_cost(forward.first);
     grads   = backward_propagation(forward.second);
     update_parameters(grads);
-    if (this->print_cost and i%1000 == 0)
+    if (this->print_cost and i%10 == 0)
       cout<<"Cost after iteration "<<i<<" :"<<cost<<endl;
   }
+}
+
+
+vector<vector<int>> NeuralNets::predict(vector<vector<double>> X){
+  pair<vector<vector<double>>,Cache> forward = forward_propagation(X);
+  vector<vector<double>> probabilities = sigmoid(forward.first);
+  vector<vector<int   >> predictions (probabilities.size(), vector<int>(probabilities[0].size(), 0));
+  for (size_t i = 0; i < probabilities.size(); i++)
+    for (size_t j = 0; j < probabilities[0].size(); j++)
+      if(probabilities[i][j] >= threshold){
+        predictions[i][j] = 1;
+      }
+  return predictions;
 }
 
 vector<vector<double>> NeuralNets::tanh_v(vector<vector<double>> Z){
@@ -131,6 +146,14 @@ vector<vector<double>> NeuralNets::random_uniform(int x, int y){
       V[i][j] = ((double)x0/2147483648) * 0.01;
     }
 	return V;
+}
+
+void NeuralNets::set_threshold(){
+  double count_label_1 = 0;
+  for (size_t i = 0; i < this->Y.size(); i++)
+    if(this->Y[i][0] == 1)
+      count_label_1++;
+  threshold = (double)count_label_1/this->Y.size();
 }
 
 // double NeuralNets::random_uniform(){
