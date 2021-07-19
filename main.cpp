@@ -48,13 +48,13 @@ int main(int argc, char const *argv[]) {
   cout<<"\nb2 = "<<endl;
   print(NN.parameters.b2);
 
-  vector<vector<int>> preds = T(NN.predict(dataset.X_test));
+  vector<vector<int>> preds = T(NN.predict(dataset.X_train));
   double accuracy = 0;
-  for (size_t i = 0; i < dataset.Y_test.size(); i++) {
-    accuracy += (dataset.Y_test[i][0] == preds[i][0])? 1 : 0;
+  for (size_t i = 0; i < dataset.Y_train.size(); i++) {
+    accuracy += (dataset.Y_train[i][0] == preds[i][0])? 1 : 0;
   }
 
-  cout<<"\nAccuracy = "<<(double)accuracy/dataset.Y_test.size()<<endl;
+  cout<<"\nAccuracy = "<<(double)accuracy/dataset.Y_train.size()<<endl;
 
   return 0;
 }

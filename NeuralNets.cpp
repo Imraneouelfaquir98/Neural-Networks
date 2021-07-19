@@ -104,7 +104,7 @@ vector<vector<int>> NeuralNets::predict(vector<vector<double>> X){
   vector<vector<int   >> predictions (probabilities.size(), vector<int>(probabilities[0].size(), 0));
   for (size_t i = 0; i < probabilities.size(); i++)
     for (size_t j = 0; j < probabilities[0].size(); j++)
-      if(probabilities[i][j] >= threshold){
+      if(probabilities[i][j] >= 0.6){
         predictions[i][j] = 1;
       }
   return predictions;
