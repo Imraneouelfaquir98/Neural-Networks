@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include <cmath>
 
@@ -315,6 +316,15 @@ template <typename T> void print(vector<vector<T>> vect){
     for (size_t j = 0; j < vect[0].size(); j++)
       cout<<vect[i][j]<<"  \t";
     cout<<endl;
+  }
+}
+
+template <typename T> void write_vector(string name, vector<vector<T>> vect, ofstream * file){
+  *file<<"\n" + name + " = \n";
+  for (size_t i = 0; i < vect.size(); i++){
+    for (size_t j = 0; j < vect[0].size(); j++)
+      *file<<to_string(vect[i][j]) + "  \t";
+    *file<<"\n";
   }
 }
 

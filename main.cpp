@@ -19,13 +19,15 @@ vector<vector<double>> read_csv(string filename);
 
 int main(int argc, char const *argv[]) {
 
+
+
   Dataset dataset;
   for (int i = 1; i <= 50; i++)
     dataset = load_dataset("./SolutionDatasetRC101/solution_data_"+to_string(i)+".txt", dataset);
 
   double learning_rate = 0.001;
   int    n_h = 10;
-  int    num_iterations = 5000;
+  int    num_iterations = 1000;
   bool   print_cost = true;
 
   NeuralNets NN = NeuralNets(
@@ -36,9 +38,13 @@ int main(int argc, char const *argv[]) {
     num_iterations,
     print_cost
   );
-
-
-  NN.fit();
+  //
+  //
+  // NN.fit();
+  //
+  //
+  NN.load_parameters("parameters.txt");
+  cout<<"\nn_h = "<<NN.n_h<<"\n"<<endl;
   cout<<"\nW1 = "<<endl;
   print(NN.parameters.W1);
   cout<<"\nb1 = "<<endl;
@@ -47,20 +53,21 @@ int main(int argc, char const *argv[]) {
   print(NN.parameters.W2);
   cout<<"\nb2 = "<<endl;
   print(NN.parameters.b2);
-
-  vector<vector<int>> preds = T(NN.predict(dataset.X_test));
-  double accuracy = 0;
-  for (size_t i = 0; i < dataset.Y_test.size(); i++) {
-    accuracy += (dataset.Y_test[i][0] == preds[i][0])? 1 : 0;
-  }
-
-  cout<<"\nAccuracy = "<<(double)accuracy/dataset.Y_test.size()<<endl;
+  //
+  // NN.save_parameters("parameters.txt");
+  //
+  // vector<vector<int>> preds = NN.predict(dataset.X_test);
+  //
+  // double accuracy = 0;
+  // for (size_t i = 0; i < dataset.Y_test.size(); i++) {
+  //   accuracy += (dataset.Y_test[i][0] == preds[i][0])? 1 : 0;
+  // }
+  //
+  // cout<<"\nAccuracy = "<<(double)accuracy/dataset.Y_test.size()<<endl;
 
   return 0;
 }
 // g++ -c main.cpp NeuralNets.cpp && g++ main.o NeuralNets.o -o out && ./out
-
-
 
 Dataset load_dataset(string filename, Dataset dataset){
   ifstream myFile(filename);
@@ -69,7 +76,6 @@ Dataset load_dataset(string filename, Dataset dataset){
   double val;
   stringstream ss;
   int counter = 0;
-
 
   if(!myFile.is_open()) throw runtime_error("Could not open \""+filename+"\" file");
   for (size_t i = 0; i < 4; i++) getline(myFile, line);

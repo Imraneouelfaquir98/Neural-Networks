@@ -4,6 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <fstream>
+#include <sstream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -47,17 +50,18 @@ public:
 	void     update_parameters   (Grads  grads);
 	void     fit                 ();
 
-	pair<vector<vector<double>>,Cache> forward_propagation (vector<vector<double>> X);
-
+	pair<vector<vector<double>>,Cache>
+												 forward_propagation (vector<vector<double>> X);
 	vector<vector<int   >> predict (vector<vector<double>> X);
 	vector<vector<double>> sigmoid (vector<vector<double>> Z);
 	vector<vector<double>> tanh_v  (vector<vector<double>> Z);
 	vector<vector<double>> log_v   (vector<vector<double>> Z);
 
+	void save_parameters(string filename);
+	void load_parameters(string filename);
+
 	long long int x0 = 765502822;
-	double threshold;
 	vector<vector<double>> random_uniform(int x, int y);
-	void set_threshold();
 };
 
 

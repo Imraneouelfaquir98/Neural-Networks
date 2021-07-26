@@ -23,7 +23,6 @@ NeuralNets::NeuralNets(
   n_y = 1;//(int)this->Y[0].size();
 
   initialize_parameters();
-  set_threshold();
 }
 
 void NeuralNets::initialize_parameters(){
@@ -107,7 +106,7 @@ vector<vector<int>> NeuralNets::predict(vector<vector<double>> X){
       if(probabilities[i][j] >= 0.6){
         predictions[i][j] = 1;
       }
-  return predictions;
+  return T(predictions);
 }
 
 vector<vector<double>> NeuralNets::tanh_v(vector<vector<double>> Z){
@@ -150,13 +149,64 @@ vector<vector<double>> NeuralNets::random_uniform(int x, int y){
 	return V;
 }
 
-void NeuralNets::set_threshold(){
-  double count_label_1 = 0;
-  for (size_t i = 0; i < this->Y.size(); i++)
-    if(this->Y[i][0] == 1)
-      count_label_1++;
-  threshold = (double)count_label_1/this->Y.size();
+void NeuralNets::save_parameters(string filename){
+  ofstream file(filename);
+  if(!file.is_open()) throw runtime_error("Can not create \'"+filename+"\' file! please try later.");
+
+  if(file.good()){
+    file<<"Number_of_neurons:\t" + to_string(this->n_h) + "\n";
+
+    write_vector("W1", parameters.W1, &file);
+    write_vector("b1", parameters.b1, &file);
+    write_vector("W2", parameters.W2, &file);
+    write_vector("b2", parameters.b2, &file);
+
+    file.close();
+  }
 }
+
+
+void NeuralNets::load_parameters(string filename){
+  ifstream file(filename);
+  if(!file.is_open()) throw runtime_error("Can not open this file\'" + filename + "\'!!");
+  if(file.good()){
+    parameters = Parameters();
+    vector<double> x_line; double x;
+    stringstream ss; string line;
+    getline(file, line);
+    ss = stringstream(line);
+    ss>>line; ss>>this->n_h;
+
+    getline(file, line);getline(file, line);
+    for (size_t i = 0; i < this->n_h ; i++) {
+      getline(file, line);
+      ss = stringstream(line);
+      while(ss >> x) x_line.push_back(x);
+      this->parameters.W1.push_back(x_line);
+      x_line.clear();
+    }
+
+    getline(file, line);getline(file, line);
+    for (size_t i = 0; i < this->n_h ; i++) {
+      getline(file, line);
+      ss = stringstream(line); ss>>x;
+      this->parameters.b1.push_back({x});
+    }
+
+    getline(file, line);getline(file, line);getline(file, line);
+    ss = stringstream(line);
+    while(ss >> x) x_line.push_back(x);
+    this->parameters.W2.push_back(x_line);
+    x_line.clear();
+
+    getline(file, line);getline(file, line);getline(file, line);
+    ss = stringstream(line); ss>>x;
+    parameters.b2.push_back({x});
+    file.close();
+  }
+}
+
+
 
 // double NeuralNets::random_uniform(){
 //   x0 = (65539*x0)%2147483648;
